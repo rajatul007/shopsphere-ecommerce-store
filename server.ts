@@ -1,3 +1,4 @@
+```ts
 import express, { Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
@@ -12,7 +13,10 @@ import productRoutes from './backend/routes/productRoutes.ts';
 import cartRoutes from './backend/routes/cartRoutes.ts';
 import orderRoutes from './backend/routes/orderRoutes.ts';
 import userRoutes from './backend/routes/userRoutes.ts';
-import { errorHandler, notFoundHandler } from './backend/middleware/errorMiddleware.ts';
+import {
+  errorHandler,
+  notFoundHandler
+} from './backend/middleware/errorMiddleware.ts';
 
 dotenv.config();
 
@@ -20,25 +24,62 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Security & Parsing Middleware
+const PORT = Number(process.env.PORT) || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+
+// Security
 app.use(
   helmet({
-    contentSecurityPolicy: false, // Allows loading Google Fonts and local assets smoothly
-    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
   })
 );
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve static assets (images, css, js)
-app.use('/src/assets/images', express.static(path.join(__dirname, 'src', 'assets', 'images')));
-app.use(express.static(path.join(__dirname, 'frontend')));
+// CORS
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    credentials: true
+  })
+);
 
-// Clean HTML page routing helpers
+// Request parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Static files
+app.use(
+  '/src/assets/images',
+  express.static(
+    path.join(__dirname, 'src', 'assets', 'images')
+  )
+);
+
 const frontendDir = path.join(__dirname, 'frontend');
+
+app.use(express.static(frontendDir));
+
+// Health check
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'ShopSphere',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
+
+// Frontend routes
+app.get('/', (_req: Request, res: Response) => {
+  res.sendFile(path.join(frontendDir, 'index.html'));
+});
 
 app.get('/products', (_req: Request, res: Response) => {
   res.sendFile(path.join(frontendDir, 'products.html'));
@@ -76,43 +117,34 @@ app.get('/admin', (_req: Request, res: Response) => {
   res.sendFile(path.join(frontendDir, 'admin.html'));
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/users', userRoutes);
-
-// Root route
-app.get('/', (_req: Request, res: Response) => {
-  res.sendFile(path.join(frontendDir, 'index.html'));
-});
-
-// API 404 handler for missing /api routes
+// API 404 handler
 app.use('/api/*', notFoundHandler);
 
-// Central error handler
+// Global error handler
 app.use(errorHandler);
 
-// Global fallback for any unmatched non-API page request
+// Frontend fallback
 app.get('*', (_req: Request, res: Response) => {
   res.sendFile(path.join(frontendDir, 'index.html'));
 });
 
-// Initialize database and start server
+// Start server
 const startServer = async () => {
   try {
     await connectDB();
     await seedDatabase();
 
-    app.listen(PORT, () => {
-      console.log(`===============================================`);
-      console.log(`  ShopSphere Server running on port ${PORT}`);
-      console.log(`  Access the app at: http://localhost:${PORT}`);
-      console.log(`===============================================`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log('===============================================');
+      console.log(`  ShopSphere running on port ${PORT}`);
+      console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log('===============================================');
     });
-  } catch (error: any) {
-    console.error(`Failed to launch server: ${error.message}`);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Unknown server error';
+
+    console.error(`Failed to launch ShopSphere: ${message}`);
     process.exit(1);
   }
 };
@@ -120,3 +152,4 @@ const startServer = async () => {
 startServer();
 
 export default app;
+```
