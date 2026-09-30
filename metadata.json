@@ -1,7 +1,7 @@
-```json
+json
 {
   "name": "ShopSphere",
   "description": "A modern, full-stack responsive e-commerce web application featuring product listings, catalog filtering, shopping cart management, user authentication, checkout workflows, order processing, and administrative controls.",
   "requestFramePermissions": []
 }
-```
+
