@@ -1,295 +1,341 @@
 # ShopSphere — Full-Stack E-Commerce Platform
 
-A production-grade, responsive full-stack e-commerce web application built with **Node.js, Express.js, MongoDB, Mongoose, and Vanilla JavaScript (ES6+ Modules)**. Engineered with a focus on clean design principles, secure JWT authentication, real-time database transactions, and an intuitive administrative portal.
+ShopSphere is a modern full-stack e-commerce web application built for browsing products, managing shopping carts, placing orders, and managing user accounts.
 
----
+The project includes a responsive storefront, authentication, product management, cart functionality, order management, and an admin dashboard.
 
-## Table of Contents
+## Features
 
-1. [Project Overview](#project-overview)
-2. [Key Features](#key-features)
-3. [Technology Stack](#technology-stack)
-4. [Project Architecture](#project-architecture)
-5. [Installation & Setup](#installation--setup)
-6. [Environment Variables](#environment-variables)
-7. [Database Setup & Seeding](#database-setup--seeding)
-8. [API Documentation](#api-documentation)
-9. [Authentication & Authorization](#authentication--authorization)
-10. [Admin Portal](#admin-portal)
-11. [Screenshots](#screenshots)
-12. [Future Improvements](#future-improvements)
-13. [License](#license)
-
----
-
-## Project Overview
-
-**ShopSphere** is a curated digital commerce storefront designed for modern lifestyles. The application delivers a streamlined end-to-end purchasing workflow: from dynamic catalog filtering and real-time stock verification to cart persistence, checkout, order generation, and merchant administrative controls.
-
-Built without heavy frontend client frameworks, ShopSphere demonstrates mastery of core web fundamentals: semantic HTML5, modern CSS3 (custom properties, flexbox, CSS grid, and micro-interactions), and modular Vanilla JavaScript.
-
----
-
-## Key Features
-
-### Storefront & Catalog
-- **Dynamic Product Filtering**: Instant multi-attribute search across product names, descriptions, categories, and price ranges.
-- **Sorting Mechanisms**: Sort products by newest arrivals, price (ascending/descending), and customer ratings.
-- **Rich Product Details (PDP)**: Contiguous purchase module featuring high-resolution galleries, quantity selectors, live stock indicators, and contextual product recommendations.
-- **Responsive Across Viewports**: Handcrafted fluid layouts tested across 360px (mobile), 768px (tablet), 1024px (laptop), and 1440px+ (desktop).
-
-### Cart & Checkout
-- **Persistent Shopping Bag**: Full CRUD operations for cart items (add, update quantity, remove, clear) synchronized with MongoDB for logged-in accounts.
-- **Real-Time Total Calculations**: Automatic subtotal tallying, dynamic shipping computation (free shipping threshold over $100), and final amount calculations.
-- **Checkout Workflow**: Two-column checkout interface capturing shipping addresses and payment preferences (Cash on Delivery or simulated Online Card Payment).
-- **Order Confirmation**: Generates a unique order reference number with an itemized receipt and estimated delivery scheduling.
-
-### User Account & Management
-- **Secure Authentication**: JWT-based stateless authentication with password hashing via `bcryptjs`.
-- **User Profile**: View and edit contact details, phone number, and default delivery addresses.
-- **Order History**: Track past purchases, current fulfillment status, and delivery milestones.
-
-### Merchant & Admin Dashboard
-- **Executive Metrics**: Real-time sales revenue, total order volume, catalog count, and registered customer tallies.
-- **Catalog Management (CRUD)**: Create new products with custom specifications, edit existing listings, adjust pricing/stock, and delete discontinued items.
-- **Order Fulfillment**: Track all customer orders and advance statuses (`Pending`, `Confirmed`, `Processing`, `Shipped`, `Delivered`, `Cancelled`).
-- **Customer Directory**: View all registered users and shipping locations.
-
----
+* User registration and login
+* JWT-based authentication
+* Product browsing and product details
+* Product categories and filtering
+* Shopping cart management
+* Checkout and order creation
+* Order history
+* User profile management
+* Admin dashboard
+* Product and user management
+* Responsive interface
+* MongoDB database integration
+* Database seeding with sample products and users
+* REST API architecture
+* Secure HTTP headers with Helmet
+* CORS configuration
+* Environment-based configuration
 
 ## Technology Stack
 
 ### Frontend
-- **HTML5**: Semantic document structure adhering to accessibility (WCAG AA) standards.
-- **CSS3**: Custom CSS architecture with clean color distribution (60-30-10 rule), smooth transitions ($\le 200\text{ms}$), tabular numeral alignment, and responsive grid layouts.
-- **Vanilla JavaScript (ES6+)**: Native module pattern (`import`/`export`), Fetch API client with automatic token attachment, custom event buses, and zero external framework lock-in.
+
+* React
+* Vite
+* Tailwind CSS
+* Lucide React
+* Motion
 
 ### Backend
-- **Node.js**: Asynchronous event-driven runtime environment.
-- **Express.js**: RESTful API architecture with modular routers, controller-service patterns, and central error-handling middleware.
-- **JWT (JSON Web Tokens)**: Secure token issuance and verification middleware.
-- **bcryptjs**: Salt-hashed password encryption (10 rounds).
-- **Helmet & CORS**: HTTP security header protection and Cross-Origin Resource Sharing governance.
 
-### Database
-- **MongoDB**: Document-oriented NoSQL database.
-- **Mongoose**: Strict schema validation, pre-save encryption hooks, model population, and relational querying.
-- **MongoMemoryServer**: Automatic embedded in-memory MongoDB instance fallback when external MongoDB URI is not configured, enabling zero-config local testing.
+* Node.js
+* Express.js
+* TypeScript
+* MongoDB
+* Mongoose
+* JWT Authentication
+* bcryptjs
+* Helmet
+* CORS
 
----
+### Development Tools
 
-## Project Architecture
+* Vite
+* TypeScript
+* TSX
+* ESLint/TypeScript checking
 
-```
-shopsphere/
-│
-├── frontend/
-│   ├── index.html            # Landing & storefront home page
-│   ├── products.html         # Catalog with search & filtering
-│   ├── product.html          # Individual product details view
-│   ├── cart.html             # Persistent shopping bag
-│   ├── checkout.html         # Shipping address & order checkout
-│   ├── login.html            # User authentication sign-in
-│   ├── register.html         # User account registration
-│   ├── profile.html          # Account settings & default shipping
-│   ├── orders.html           # Customer order tracking history
-│   ├── admin.html            # Merchant administrative dashboard
-│   │
-│   ├── css/
-│   │   └── style.css         # Unified stylesheet & design system
-│   │
-│   └── js/
-│       ├── api.js            # Fetch client, auth headers & toast manager
-│       ├── auth.js           # Session state, login/register & route guards
-│       ├── products.js       # Catalog fetching, filtering & card rendering
-│       ├── product-detail.js # PDP gallery, quantity stepper & buy-now
-│       ├── cart.js           # Cart state, item stepper & summary calculations
-│       ├── checkout.js       # Form validation & order confirmation
-│       ├── profile.js        # Profile updates & password change
-│       ├── orders.js         # User order listing & status indicators
-│       ├── admin.js          # Admin stats, catalog CRUD & order status
-│       └── main.js           # Header, footer, cart badge & common utils
+## Project Structure
+
+```text
+ShopSphere/
 │
 ├── backend/
 │   ├── config/
-│   │   └── db.ts             # MongoDB / Mongoose connection manager
-│   ├── models/
-│   │   ├── User.ts           # User schema, password hashing & cart items
-│   │   ├── Product.ts        # Product schema, pricing & inventory
-│   │   └── Order.ts          # Order schema, address & status enums
-│   ├── routes/
-│   │   ├── authRoutes.ts     # /api/auth routes
-│   │   ├── productRoutes.ts  # /api/products routes
-│   │   ├── cartRoutes.ts     # /api/cart routes
-│   │   ├── orderRoutes.ts    # /api/orders routes
-│   │   └── userRoutes.ts     # /api/users & admin routes
+│   │   └── db.ts
+│   │
 │   ├── middleware/
-│   │   ├── authMiddleware.ts # JWT protect & adminOnly middleware
-│   │   └── errorMiddleware.ts# Centralized error & 404 handlers
+│   │   └── errorMiddleware.ts
+│   │
+│   ├── models/
+│   ├── routes/
 │   ├── controllers/
-│   │   ├── authController.ts # User registration, login, getMe
-│   │   ├── productController.ts # Catalog query, details, CRUD
-│   │   ├── cartController.ts # Cart item synchronization
-│   │   ├── orderController.ts# Order placement, status modification
-│   │   └── userController.ts # Profile management & admin statistics
-│   └── seed.ts               # Database sample seeder
+│   └── seed.ts
 │
-├── server.ts                 # Express server entry point & static file routing
-├── package.json              # Project dependencies & scripts
-├── .env.example              # Environment variables template
-├── .gitignore                # Git ignore rules
-└── README.md                 # Complete project documentation
+├── frontend/
+│   ├── index.html
+│   ├── products.html
+│   ├── product.html
+│   ├── cart.html
+│   ├── checkout.html
+│   ├── login.html
+│   ├── register.html
+│   ├── profile.html
+│   ├── orders.html
+│   └── admin.html
+│
+├── src/
+│   └── assets/
+│       └── images/
+│
+├── server.ts
+├── package.json
+├── vite.config.ts
+├── .env.example
+├── .gitignore
+└── README.md
 ```
 
----
+## Installation
 
-## Installation & Setup
+Clone the repository:
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **npm** or **bun** or **yarn**
+```bash
+git clone https://github.com/rajatul007/shopsphere-ecommerce-store.git
+```
 
-### Step-by-Step Installation
+Move into the project directory:
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-username/shopsphere.git
-   cd shopsphere
-   ```
+```bash
+cd shopsphere-ecommerce-store
+```
 
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+Install dependencies:
 
-3. **Configure Environment Variables**
-   Create a `.env` file in the root directory based on `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Run the Development Server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Access the Application**
-   Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
-
----
+```bash
+npm install
+```
 
 ## Environment Variables
 
-| Variable | Description | Default |
-| :--- | :--- | :--- |
-| `PORT` | Network port for the Express application | `3000` |
-| `MONGODB_URI` | MongoDB connection string (Atlas or Local) | Embedded In-Memory fallback |
-| `JWT_SECRET` | Secret key used for signing JSON Web Tokens | `shopsphere_super_secret_jwt_key_2026_portfolio` |
-| `NODE_ENV` | Application environment mode | `development` |
+Create a `.env` file in the project root.
 
-*Note: If `MONGODB_URI` is left blank, the application automatically launches an embedded in-memory MongoDB server via `mongodb-memory-server` and pre-populates sample data, allowing instantaneous local evaluation without external database configuration.*
+Example:
 
----
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_strong_jwt_secret
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+```
 
-## Database Setup & Seeding
+Do not commit the `.env` file to GitHub.
 
-The application includes an automated database seeder (`backend/seed.ts`). When the server starts for the first time, it automatically initializes:
-- **Default Admin Account**: `admin@shopsphere.com` / `admin123`
-- **Default Customer Account**: `alex@shopsphere.com` / `user123`
-- **14+ Curated Products** across Electronics, Fashion, Shoes, Accessories, Home & Living, and Beauty.
-- **Sample Verified Orders** with shipping addresses and order numbers.
+The `.env.example` file is provided as a template for local configuration.
 
-To manually re-seed the database at any time:
+## Running the Application
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will run on:
+
+```text
+http://localhost:3000
+```
+
+## Database Seeding
+
+ShopSphere includes a database seed script for creating sample users, products, and order data.
+
+Run:
+
 ```bash
 npm run seed
 ```
 
----
+The seed script can be used during development to populate the database with sample data.
 
-## API Documentation
+## Available Scripts
 
-### Authentication (`/api/auth`)
-- `POST /api/auth/register` — Create a new customer account
-- `POST /api/auth/login` — Authenticate user and receive JWT token
-- `GET /api/auth/me` — Fetch currently authenticated user profile *(Private)*
+| Command           | Description                        |
+| ----------------- | ---------------------------------- |
+| `npm run dev`     | Start the development server       |
+| `npm start`       | Start the application              |
+| `npm run seed`    | Seed the database with sample data |
+| `npm run build`   | Build the application              |
+| `npm run preview` | Preview the production build       |
+| `npm run lint`    | Run TypeScript checking            |
 
-### Products (`/api/products`)
-- `GET /api/products` — Retrieve products with optional query filters (`keyword`, `category`, `minPrice`, `maxPrice`, `sort`, `featured`)
-- `GET /api/products/:id` — Retrieve product details and related recommendations
-- `POST /api/products` — Add a new product *(Admin Only)*
-- `PUT /api/products/:id` — Update product details or stock *(Admin Only)*
-- `DELETE /api/products/:id` — Delete product *(Admin Only)*
+## Application Routes
 
-### Shopping Cart (`/api/cart`)
-- `GET /api/cart` — Fetch current user's populated cart and totals *(Private)*
-- `POST /api/cart` — Add product to cart or increment quantity *(Private)*
-- `PUT /api/cart/:productId` — Update item quantity *(Private)*
-- `DELETE /api/cart/:productId` — Remove specific item from cart *(Private)*
-- `DELETE /api/cart` — Clear entire shopping bag *(Private)*
+| Route       | Description       |
+| ----------- | ----------------- |
+| `/`         | Home page         |
+| `/products` | Product listing   |
+| `/product`  | Product details   |
+| `/cart`     | Shopping cart     |
+| `/checkout` | Checkout          |
+| `/login`    | User login        |
+| `/register` | User registration |
+| `/profile`  | User profile      |
+| `/orders`   | Order history     |
+| `/admin`    | Admin dashboard   |
 
-### Orders (`/api/orders`)
-- `POST /api/orders` — Place a new order with shipping details *(Private)*
-- `GET /api/orders` — Retrieve logged-in user's order history *(Private)*
-- `GET /api/orders/:id` — Retrieve order receipt by ID *(Private)*
-- `GET /api/orders/admin/all` — Retrieve all orders across the system *(Admin Only)*
-- `PUT /api/orders/:id/status` — Update order status and payment status *(Admin Only)*
+## API Endpoints
 
-### Users & Administration (`/api/users`)
-- `GET /api/users/profile` — Fetch user profile *(Private)*
-- `PUT /api/users/profile` — Update name, phone, address, or password *(Private)*
-- `GET /api/users` — List all registered users *(Admin Only)*
-- `GET /api/users/admin/stats` — Executive dashboard statistics *(Admin Only)*
+### Authentication
 
----
-
-## Authentication & Authorization
-
-Authentication is implemented via standard Bearer tokens in the `Authorization` header:
+```text
+POST /api/auth/register
+POST /api/auth/login
 ```
-Authorization: Bearer <JWT_TOKEN>
+
+### Products
+
+```text
+GET /api/products
+GET /api/products/:id
 ```
-Tokens are stored in client-side `localStorage` under `shopsphere_token`. Middleware on the server verifies the signature, looks up the corresponding user, and verifies role credentials (`user` vs `admin`).
 
-### Test Accounts
+### Cart
 
-| Role | Email | Password | Access Level |
-| :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@shopsphere.com` | `admin123` | Storefront + Admin Dashboard + Product CRUD + Order Status Management |
-| **Customer** | `alex@shopsphere.com` | `user123` | Storefront + Cart + Checkout + Order History + Profile Management |
+```text
+GET /api/cart
+POST /api/cart
+PUT /api/cart/:id
+DELETE /api/cart/:id
+```
 
-*Quick test fill buttons are available on the Sign In page for one-click testing.*
+### Orders
 
----
+```text
+POST /api/orders
+GET /api/orders
+GET /api/orders/:id
+```
 
-## Admin Portal
+### Users
 
-Navigating to `/admin.html` with an administrator account unlocks:
-1. **Financial Overview**: Total revenue calculation from all active orders.
-2. **Catalog Controls**: Real-time product creation modal with category assignment, pricing, image linking, and description fields.
-3. **Fulfillment Pipeline**: Instant dropdown status updating for customer orders with automatic delivery payment reconciliations.
-4. **User Tracking**: Directory of active customers and their registered locations.
+```text
+GET /api/users/profile
+PUT /api/users/profile
+```
 
----
+The exact available endpoints may depend on the route implementations in the backend.
 
-## Screenshots
+## Authentication
 
-*(Screenshots can be added here displaying Home, Catalog, Product Details, Cart, Checkout, and Admin views).*
+ShopSphere uses JWT-based authentication.
 
----
+After successful login, the application uses the authentication token to authorize protected API requests.
 
-## Future Improvements
+Passwords are handled using bcryptjs rather than being stored as plain text.
 
-- Integration of Stripe Elements for live card tokenization.
-- Multi-currency conversion and international tax estimation.
-- User review submission and image attachment on product detail pages.
-- Automated email dispatch for order confirmations using Nodemailer or SendGrid.
-- Wishlist and save-for-later functionality.
+## Admin Dashboard
 
----
+The admin section provides functionality for managing the e-commerce application.
+
+Depending on the implemented backend permissions, administrators can manage:
+
+* Products
+* Users
+* Orders
+* Store data
+
+The admin dashboard is available at:
+
+```text
+/admin
+```
+
+## Security
+
+The application includes several security-related configurations:
+
+* JWT authentication
+* Password hashing with bcryptjs
+* Helmet security headers
+* CORS configuration
+* Environment variables for sensitive configuration
+* Protected API routes
+* Centralized error handling
+
+## Development
+
+For development, make sure MongoDB is available and the required environment variables are configured.
+
+Then run:
+
+```bash
+npm install
+npm run dev
+```
+
+For database sample data:
+
+```bash
+npm run seed
+```
+
+## Deployment
+
+The application can be deployed using a Node.js-compatible hosting platform.
+
+Before deployment:
+
+1. Configure the production MongoDB connection.
+2. Create a strong JWT secret.
+3. Set `NODE_ENV=production`.
+4. Configure the production `CLIENT_URL`.
+5. Install production dependencies.
+6. Build the application.
+7. Start the server.
+
+Example:
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+## Environment Configuration
+
+Production environment variables should be configured through the hosting provider rather than committed to the repository.
+
+Never upload:
+
+```text
+.env
+```
+
+or real database credentials and JWT secrets to GitHub.
+
+## Project Purpose
+
+ShopSphere was developed as a full-stack e-commerce project demonstrating practical implementation of:
+
+* Frontend development
+* Backend API development
+* Database integration
+* Authentication and authorization
+* CRUD operations
+* Shopping cart workflows
+* Order management
+* Admin functionality
+* Responsive web application development
+
+## Author
+
+**Rajatul**
+
+GitHub:
+
+https://github.com/rajatul007
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is intended for educational and portfolio purposes.
