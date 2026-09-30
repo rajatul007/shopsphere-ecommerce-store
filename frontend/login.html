@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - ShopSphere</title>
+  <meta name="description" content="Sign in to your ShopSphere account to track orders and manage shipping addresses." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2rem 0 4rem;">
+    <div class="container">
+      <div class="auth-container">
+        <div class="auth-header">
+          <h1 class="auth-title">Welcome Back</h1>
+          <p class="auth-subtitle">Sign in with your email and password</p>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" required placeholder="alex@shopsphere.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" required placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+          </div>
+
+          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem;">
+            Sign In &rarr;
+          </button>
+        </form>
+
+        <!-- Quick Demo Credentials Box -->
+        <div style="margin-top:2rem;background:var(--bg-subtle);border-radius:var(--radius-sm);padding:1rem;border:1px solid var(--border-light);font-size:0.8rem;">
+          <strong style="display:block;margin-bottom:0.4rem;color:var(--text-primary);font-size:0.825rem;">Quick Test Logins:</strong>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button id="fill-user-btn" class="btn btn-secondary btn-sm" style="font-size:0.75rem;padding:0.3rem 0.6rem;">
+              Fill Customer (alex@shopsphere.com)
+            </button>
+            <button id="fill-admin-btn" class="btn btn-secondary btn-sm" style="font-size:0.75rem;padding:0.3rem 0.6rem;">
+              Fill Admin (admin@shopsphere.com)
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top:1.75rem;text-align:center;font-size:0.875rem;color:var(--text-muted);">
+          Don't have an account yet? 
+          <a href="/register.html" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Create one now</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module">
+    import { auth } from '/js/auth.js';
+    import { showToast } from '/js/api.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect
+      if (auth.isLoggedIn()) {
+        window.location.href = '/products.html';
+        return;
+      }
+
+      const form = document.getElementById('login-form');
+      const submitBtn = document.getElementById('login-submit-btn');
+      const emailInput = document.getElementById('login-email');
+      const passInput = document.getElementById('login-password');
+
+      // Demo login shortcuts
+      document.getElementById('fill-user-btn').onclick = () => {
+        emailInput.value = 'alex@shopsphere.com';
+        passInput.value = 'user123';
+      };
+
+      document.getElementById('fill-admin-btn').onclick = () => {
+        emailInput.value = 'admin@shopsphere.com';
+        passInput.value = 'admin123';
+      };
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const password = passInput.value;
+
+        if (!email || !password) {
+          showToast('Please enter both email and password.', 'error');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+
+        try {
+          const res = await auth.login(email, password);
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirect = urlParams.get('redirect') || (res.user.role === 'admin' ? '/admin.html' : '/products.html');
+          setTimeout(() => {
+            window.location.href = redirect;
+          }, 400);
+        } catch (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In →';
+        }
+      };
+    });
+  </script>
+</body>
+</html>

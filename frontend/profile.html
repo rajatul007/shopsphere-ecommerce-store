@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile - ShopSphere</title>
+  <meta name="description" content="Manage your ShopSphere customer profile and default shipping addresses." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2.5rem 0 4rem;">
+    <div class="container">
+      <div style="margin-bottom:1.5rem;">
+        <h1 style="font-size:2rem;font-weight:800;letter-spacing:-0.02em;">Account Profile</h1>
+        <p style="font-size:0.9rem;color:var(--text-muted);margin-top:0.25rem;">Manage your contact information, shipping address, and password credentials.</p>
+      </div>
+
+      <div id="profile-container">
+        <!-- Dynamically populated by /js/profile.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/profile.js"></script>
+</body>
+</html>

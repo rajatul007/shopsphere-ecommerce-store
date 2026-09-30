@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - ShopSphere</title>
+  <meta name="description" content="ShopSphere Administrative Portal: catalog management, inventory control, and order fulfillment." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2.5rem 0 4rem;">
+    <div class="container">
+      <div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <span style="font-size:0.775rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--accent-highlight);">Merchant Control Center</span>
+          <h1 style="font-size:2rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.15rem;">Admin Dashboard</h1>
+        </div>
+      </div>
+
+      <div id="admin-container">
+        <!-- Dynamically populated by /js/admin.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

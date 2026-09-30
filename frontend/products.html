@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Products - ShopSphere</title>
+  <meta name="description" content="Browse our complete collection of electronics, fashion, shoes, accessories, home & living, and beauty essentials." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2.5rem 0 4rem;">
+    <div class="container">
+      <!-- Breadcrumbs & Title -->
+      <div style="margin-bottom: 1.5rem;">
+        <div style="font-size:0.85rem;color:var(--text-muted);display:flex;gap:0.4rem;align-items:center;margin-bottom:0.5rem;">
+          <a href="/">Home</a>
+          <span>/</span>
+          <span style="color:var(--text-primary);font-weight:600;">Products</span>
+        </div>
+        <h1 style="font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;">Collection Catalog</h1>
+      </div>
+
+      <!-- Catalog Layout -->
+      <div class="catalog-layout">
+        <!-- Sidebar Filters -->
+        <aside class="filter-sidebar">
+          <!-- Search box -->
+          <div class="filter-group">
+            <h4 class="filter-title">Search</h4>
+            <div class="search-input-wrap" style="margin-bottom:0;">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-input" class="search-input" placeholder="Search keywords..." />
+            </div>
+          </div>
+
+          <!-- Category filter -->
+          <div class="filter-group">
+            <h4 class="filter-title">Categories</h4>
+            <ul class="filter-list">
+              <li><button class="filter-btn category-filter-btn active" data-category="All">All Categories</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Electronics">Electronics</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Fashion">Fashion</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Shoes">Shoes</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Accessories">Accessories</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Home & Living">Home &amp; Living</button></li>
+              <li><button class="filter-btn category-filter-btn" data-category="Beauty">Beauty</button></li>
+            </ul>
+          </div>
+
+          <!-- Price filter -->
+          <div class="filter-group">
+            <h4 class="filter-title">Price Range ($)</h4>
+            <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;">
+              <input type="number" id="min-price-input" class="form-control" placeholder="Min" min="0" style="padding:0.4rem 0.6rem;font-size:0.85rem;" />
+              <span style="color:var(--text-muted);">&ndash;</span>
+              <input type="number" id="max-price-input" class="form-control" placeholder="Max" min="0" style="padding:0.4rem 0.6rem;font-size:0.85rem;" />
+            </div>
+            <button id="apply-price-filter" class="btn btn-secondary btn-block btn-sm">Apply Price</button>
+          </div>
+        </aside>
+
+        <!-- Main Catalog Stream -->
+        <div>
+          <!-- Sort & Count Bar -->
+          <div class="sort-bar">
+            <span id="products-count" style="font-size:0.875rem;font-weight:600;color:var(--text-secondary);">
+              Loading catalog...
+            </span>
+
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <label for="sort-select" style="font-size:0.825rem;color:var(--text-muted);font-weight:600;">Sort By:</label>
+              <select id="sort-select" class="select-control">
+                <option value="newest">Newest Arrivals</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="name-asc">Alphabetical (A-Z)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div id="products-grid" class="products-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/products.js"></script>
+  <script type="module">
+    import { initProductFilters } from '/js/products.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      initProductFilters();
+    });
+  </script>
+</body>
+</html>

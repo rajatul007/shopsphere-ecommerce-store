@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account - ShopSphere</title>
+  <meta name="description" content="Join ShopSphere for seamless shopping, order tracking, and curated product collections." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2rem 0 4rem;">
+    <div class="container">
+      <div class="auth-container">
+        <div class="auth-header">
+          <h1 class="auth-title">Create Account</h1>
+          <p class="auth-subtitle">Join ShopSphere to save preferences and track orders</p>
+        </div>
+
+        <form id="register-form">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" class="form-control" required placeholder="e.g. Jordan Hayes" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address *</label>
+            <input type="email" id="reg-email" class="form-control" required placeholder="jordan@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password *</label>
+            <input type="password" id="reg-password" class="form-control" minlength="6" required placeholder="At least 6 characters" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm">Confirm Password *</label>
+            <input type="password" id="reg-confirm" class="form-control" minlength="6" required placeholder="Re-enter password" />
+          </div>
+
+          <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem;">
+            Create My Account &rarr;
+          </button>
+        </form>
+
+        <div style="margin-top:1.75rem;text-align:center;font-size:0.875rem;color:var(--text-muted);">
+          Already have an account? 
+          <a href="/login.html" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module">
+    import { auth } from '/js/auth.js';
+    import { showToast } from '/js/api.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('register-form');
+      const submitBtn = document.getElementById('reg-submit-btn');
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm').value;
+
+        if (!name || !email || !password) {
+          showToast('Please fill out all required fields.', 'error');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showToast('Passwords do not match. Please verify.', 'error');
+          return;
+        }
+
+        if (password.length < 6) {
+          showToast('Password must be at least 6 characters.', 'error');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+
+        try {
+          await auth.register({ name, email, password, confirmPassword });
+          setTimeout(() => {
+            window.location.href = '/products.html';
+          }, 400);
+        } catch (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Create My Account →';
+        }
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - ShopSphere</title>
+  <meta name="description" content="Secure checkout with customer shipping information and flexible payment methods." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div id="site-header"></div>
+
+  <main style="padding: 2.5rem 0 4rem;">
+    <div class="container">
+      <div style="margin-bottom:1.5rem;">
+        <h1 style="font-size:2rem;font-weight:800;letter-spacing:-0.02em;">Secure Checkout</h1>
+        <p style="font-size:0.9rem;color:var(--text-muted);margin-top:0.25rem;">Verify your delivery address and choose your preferred payment option.</p>
+      </div>
+
+      <div id="checkout-container">
+        <!-- Dynamically populated by /js/checkout.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="site-footer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/api.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="/js/checkout.js"></script>
+</body>
+</html>
